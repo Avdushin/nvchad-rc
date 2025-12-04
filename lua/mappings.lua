@@ -16,13 +16,28 @@ map("n", "<C-S-i>", function()
   require("conform").format { lsp_fallback = true }
 end, { desc = "Format code" })
 
--- Toggle bottom terminal with Ctrl+~
+-- Bottom terminal (Ctrl + `)
 map({ "n", "t" }, "<C-`>", function()
+  require("nvchad.term").toggle { id = 1, pos = "sp", size = 0.3 }
+end, { desc = "Bottom terminal" })
+
+-- Right terminal (Ctrl + e)
+map({ "n", "t" }, "<C-e>", function()
+  require("nvchad.term").toggle { id = 2, pos = "vsp", size = 0.3 }
+end, { desc = "Right terminal" })
+
+-- Floating terminal (Ctrl + Shift + t)
+map({ "n", "t" }, "<C-S-t>", function()
   require("nvchad.term").toggle {
-    pos = "sp", -- horizontal split (bottom)
-    size = 0.3, -- 30% высоты окна, можешь поменять
+    id = 3,
+    pos = "float",
   }
-end, { desc = "Toggle bottom terminal" })
+end, { desc = "Floating terminal" })
+
+-- Terminal in a tab
+map("n", "<leader>tt", function()
+  require("nvchad.term").new { pos = "t" }
+end, { desc = "Terminal tab" })
 
 -- File search like VS Code: Ctrl + P
 map("n", "<C-p>", function()
