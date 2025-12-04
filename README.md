@@ -195,9 +195,11 @@ Loaded separately in `configs/lspconfig.lua`.
 
 ### 🖥 Terminal
 
-| Key        | Action                                        |
-| ---------- | --------------------------------------------- |
-| `Ctrl + ~` | Toggle bottom terminal (NvChad terminal, 30%) |
+| Key                | Action                                         |
+| ------------------ | ---------------------------------------------- |
+| `Ctrl + ~`         | Toggle bottom terminal (split, 30%)            |
+| `Ctrl + e`         | Toggle right terminal (vertical split, 30%)    |
+| `Ctrl + Shift + t` | Toggle floating terminal (independent session) |
 
 ### 📋 Copy current file path
 
