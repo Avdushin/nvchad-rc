@@ -2,6 +2,14 @@
 
 > Personal Neovim setup based on **NvChad** with transparency, improved Markdown rendering, modern LSP, formatting and a set of VS Code–style keybindings.
 
+## 📸 Screenshots
+
+![chadrc](./imgs/chadrc.png) \
+![term](./imgs/term.png) \
+![code](./imgs/code.png) \
+![md-mode-normal](./imgs/readme-normal.png) \
+![md-mode-insert](./imgs/readme-insert.png)
+
 ## ⚡ Shortcut Cheatsheet
 
 ### General
@@ -35,14 +43,6 @@
   - toggling file tree
 - Shortcut to **copy relative path** of current file
 - Quality-of-life mappings (jk escape, `;` enters command mode, etc.)
-
-## 📸 Screenshots
-
-![chadrc](./imgs/chadrc.png) \
-![term](./imgs/term.png) \
-![code](./imgs/code.png) \
-![md-mode-normal](./imgs/readme-normal.png) \
-![md-mode-insert](./imgs/readme-insert.png)
 
 ## 📁 File structure
 
