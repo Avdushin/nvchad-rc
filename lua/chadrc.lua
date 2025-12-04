@@ -3,7 +3,7 @@ local M = {}
 
 M.base46 = {
   theme = "gruvbox",
-  transparency = true, -- <<< ВАЖНО
+  transparency = true,
 
   hl_override = {
     -- основной фон
