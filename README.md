@@ -38,11 +38,11 @@
 
 ## 📸 Screenshots
 
-![chadrc]('./imgs/chadrc.png') \
-![term]('./imgs/term.png') \
-![code]('./imgs/code.png') \
-![md-mode-normal]('./imgs/readme-normal.png') \
-![md-mode-insert]('./imgs/readme-insert.png')
+![chadrc](./imgs/chadrc.png) \
+![term](./imgs/term.png) \
+![code](./imgs/code.png) \
+![md-mode-normal](./imgs/readme-normal.png) \
+![md-mode-insert](./imgs/readme-insert.png)
 
 ## 📁 File structure
 
