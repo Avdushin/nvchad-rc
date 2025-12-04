@@ -197,7 +197,7 @@ Loaded separately in `configs/lspconfig.lua`.
 
 | Key        | Action                                        |
 | ---------- | --------------------------------------------- |
-| `Ctrl + `` | Toggle bottom terminal (NvChad terminal, 30%) |
+| `Ctrl + ~` | Toggle bottom terminal (NvChad terminal, 30%) |
 
 ### 📋 Copy current file path
 

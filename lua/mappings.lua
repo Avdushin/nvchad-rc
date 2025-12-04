@@ -3,6 +3,7 @@ require "nvchad.mappings"
 -- add yours here
 
 local map = vim.keymap.set
+local opts = { noremap = true, silent = true }
 
 map("n", ";", ":", { desc = "CMD enter command mode" })
 map("i", "jk", "<ESC>")
@@ -71,6 +72,16 @@ end, { desc = "Copy relative file path" })
 -- Duplicate current line down
 map("n", "<leader>d", "yyp", { desc = "Duplicate line down" })
 
--- map("n", "V", "V", { noremap = true, silent = true, desc = "Line visual mode" })
+-- Двигать текущую строку вверх/вниз (NORMAL)
+map("n", "<C-S-Down>", ":m .+1<CR>==", opts)
+map("n", "<C-S-Up>", ":m .-2<CR>==", opts)
 
+-- Двигать выделение вверх/вниз (VISUAL)
+map("v", "<C-S-Down>", ":m '>+1<CR>gv=gv", opts)
+map("v", "<C-S-Up>", ":m '<-2<CR>gv=gv", opts)
+
+map("i", "<C-S-Down>", "<Esc>:m .+1<CR>==gi", opts)
+map("i", "<C-S-Up>", "<Esc>:m .-2<CR>==gi", opts)
+
+-- Двигать строку в INSERT, оставаясь в insert-режиме
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
