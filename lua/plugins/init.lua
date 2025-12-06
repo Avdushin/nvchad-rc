@@ -28,16 +28,27 @@ return {
   {
     "mg979/vim-visual-multi",
     branch = "master",
+    lazy = false, -- грузим сразу, без ленивости
     init = function()
-      vim.g.VM_maps = {
-        ["Add Cursor Down"] = "<A-j>",
-        ["Add Cursor Up"] = "<A-k>",
+      -- отключаем дефолтные бинды плагина
+      vim.g.VM_default_mappings = 0
+    end,
+    config = function()
+      -- Бинды уже после загрузки плагина (Plug- map'ы точно существуют)
 
-        ["Find Under"] = "<leader>n",
-        ["Find Subword Under"] = "<leader>n",
-        ["Select Next"] = "<leader>n",
-        ["Select Prev"] = "<leader>N",
-      }
+      -- Ctrl+D: выбрать слово под курсором / следующее вхождение
+      vim.keymap.set({ "n", "x" }, "<C-d>", "<Plug>(VM-Find-Under)", {
+        noremap = false,
+        silent = true,
+        desc = "Multi-cursor: find next occurrence",
+      })
+
+      -- Alt+D: предыдущее вхождение (назад)
+      vim.keymap.set({ "n", "x" }, "<A-d>", "<Plug>(VM-Select-Prev)", {
+        noremap = false,
+        silent = true,
+        desc = "Multi-cursor: select previous occurrence",
+      })
     end,
   },
   -- === Images in Neovim ===
