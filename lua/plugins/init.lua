@@ -28,29 +28,52 @@ return {
   {
     "mg979/vim-visual-multi",
     branch = "master",
-    lazy = false, -- грузим сразу, без ленивости
+    lazy = false, -- грузим сразу
     init = function()
-      -- отключаем дефолтные бинды плагина
+      -- вырубаем дефолтные бинды плагина
       vim.g.VM_default_mappings = 0
-    end,
-    config = function()
-      -- Бинды уже после загрузки плагина (Plug- map'ы точно существуют)
 
-      -- Ctrl+D: выбрать слово под курсором / следующее вхождение
-      vim.keymap.set({ "n", "x" }, "<C-d>", "<Plug>(VM-Find-Under)", {
-        noremap = false,
-        silent = true,
-        desc = "Multi-cursor: find next occurrence",
-      })
+      -- настраиваем всё под Ctrl+D
+      vim.g.VM_maps = {
+        ["Add Cursor Down"] = "<A-j>",
+        ["Add Cursor Up"] = "<A-k>",
 
-      -- Alt+D: предыдущее вхождение (назад)
-      vim.keymap.set({ "n", "x" }, "<A-d>", "<Plug>(VM-Select-Prev)", {
-        noremap = false,
-        silent = true,
-        desc = "Multi-cursor: select previous occurrence",
-      })
+        -- как в VS Code / Sublime
+        ["Find Under"] = "<C-d>",
+        ["Find Subword Under"] = "<C-d>",
+        ["Select Next"] = "<C-d>",
+
+        -- назад по совпадениям (Alt+D, чтобы не трогать Ctrl+N)
+        ["Select Prev"] = "<A-d>",
+      }
     end,
   },
+  -- {
+  --   "mg979/vim-visual-multi",
+  --   branch = "master",
+  --   lazy = false, -- грузим сразу, без ленивости
+  --   init = function()
+  --     -- отключаем дефолтные бинды плагина
+  --     vim.g.VM_default_mappings = 0
+  --   end,
+  --   config = function()
+  --     -- Бинды уже после загрузки плагина (Plug- map'ы точно существуют)
+  --
+  --     -- Ctrl+D: выбрать слово под курсором / следующее вхождение
+  --     vim.keymap.set({ "n", "x" }, "<C-d>", "<Plug>(VM-Find-Under)", {
+  --       noremap = false,
+  --       silent = true,
+  --       desc = "Multi-cursor: find next occurrence",
+  --     })
+  --
+  --     -- Alt+D: предыдущее вхождение (назад)
+  --     vim.keymap.set({ "n", "x" }, "<A-d>", "<Plug>(VM-Select-Prev)", {
+  --       noremap = false,
+  --       silent = true,
+  --       desc = "Multi-cursor: select previous occurrence",
+  --     })
+  --   end,
+  -- },
   -- === Images in Neovim ===
   {
     "3rd/image.nvim",

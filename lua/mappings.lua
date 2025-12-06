@@ -98,16 +98,5 @@ map("v", "<C-S-Up>", ":m '<-2<CR>gv=gv", opts)
 map("i", "<C-S-Down>", "<Esc>:m .+1<CR>==gi", opts)
 map("i", "<C-S-Up>", "<Esc>:m .-2<CR>==gi", opts)
 
--- Multi-cursor: как в VS Code (Ctrl+D)
-ap({ "n", "x" }, "<C-d>", "<Plug>(VM-Find-Under)", {
-  desc = "Select next occurrence (multi-cursor)",
-  noremap = false,  -- ОБЯЗАТЕЛЬНО для <Plug>
-})
-
-map({ "n", "x" }, "<C-S-d>", "<Plug>(VM-Select-Prev)", {
-  desc = "Select previous occurrence (multi-cursor)",
-  noremap = false,
-})
-
 -- Двигать строку в INSERT, оставаясь в insert-режиме
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
