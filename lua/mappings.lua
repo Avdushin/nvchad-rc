@@ -98,5 +98,40 @@ map("v", "<C-S-Up>", ":m '<-2<CR>gv=gv", opts)
 map("i", "<C-S-Down>", "<Esc>:m .+1<CR>==gi", opts)
 map("i", "<C-S-Up>", "<Esc>:m .-2<CR>==gi", opts)
 
+-- Чтобы оборачивать слова в (s) -> ("s")
+
+-- Обернуть содержимое () в кавычки по <leader>"
+vim.keymap.set("n", '<leader>"', function()
+  vim.cmd.normal { "yi(", bang = true }
+  local text = vim.fn.getreg("0")
+  vim.cmd.normal { "ci(", bang = true }
+  vim.api.nvim_put({ '"' .. text .. '"' }, "c", true, true)
+end, { silent = true, desc = 'Wrap () content in ""' })
+
+-- Переключение кавычек (" → ' → ` → ")
+vim.keymap.set("n", "<leader>q", function()
+  vim.cmd.normal { "yi(", bang = true }
+  local text = vim.fn.getreg("0")
+
+  local first = text:sub(1, 1)
+  local last  = text:sub(-1)
+  local body = text
+  if (first == '"' or first == "'" or first == "`") and first == last then
+    body = text:sub(2, -2)
+  end
+
+  local new_q
+  if first == '"' then
+    new_q = "'"
+  elseif first == "'" then
+    new_q = "`"
+  else
+    new_q = '"'
+  end
+
+  vim.cmd.normal { "ci(", bang = true }
+  vim.api.nvim_put({ new_q .. body .. new_q }, "c", true, true)
+end, { silent = true, desc = "Cycle quotes inside ()" })
+
 -- Двигать строку в INSERT, оставаясь в insert-режиме
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")

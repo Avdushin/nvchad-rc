@@ -10,7 +10,14 @@ return {
       require "configs.lspconfig"
     end,
   },
-
+ {
+    "kylechui/nvim-surround",
+    version = "*",
+    event = "VeryLazy",
+    config = function()
+      require("nvim-surround").setup({})
+    end,
+  },
   -- === Markdown render (как в Obsidian) ===
   {
     "MeanderingProgrammer/render-markdown.nvim",
