@@ -135,3 +135,90 @@ end, { silent = true, desc = "Cycle quotes inside ()" })
 
 -- Двигать строку в INSERT, оставаясь в insert-режиме
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
+
+-- ============================================================
+-- Search and replace with Grug FAR
+-- ============================================================
+
+-- Определяет разумную область поиска:
+-- 1. корень Git-проекта;
+-- 2. вне Git — папка текущего файла;
+-- 3. для безымянного буфера — текущий рабочий каталог.
+local function grug_far_root()
+  local file = vim.api.nvim_buf_get_name(0)
+
+  local start
+  if file ~= "" then
+    start = vim.fs.dirname(file)
+  else
+    start = vim.fn.getcwd()
+  end
+
+  local git_dir = vim.fs.find(".git", {
+    path = start,
+    upward = true,
+    type = "directory",
+    limit = 1,
+  })[1]
+
+  if git_dir then
+    return vim.fs.dirname(git_dir)
+  end
+
+  return start
+end
+
+local function open_grug_far()
+  require("grug-far").open({
+    prefills = {
+      paths = grug_far_root(),
+    },
+  })
+end
+
+-- Ctrl+Shift+F — найти и заменить в проекте/папке файла
+map("n", "<C-S-f>", open_grug_far, {
+  silent = true,
+  desc = "Find and replace in project",
+})
+
+-- Space → s → r — запасное сочетание
+map("n", "<leader>sr", open_grug_far, {
+  silent = true,
+  desc = "Find and replace in project",
+})
+
+-- Space → s → f — найти и заменить только в текущем файле
+map("n", "<leader>sf", function()
+  local file = vim.api.nvim_buf_get_name(0)
+
+  if file == "" then
+    vim.notify(
+      "Текущий буфер не связан с файлом",
+      vim.log.levels.WARN
+    )
+    return
+  end
+
+  require("grug-far").open({
+    prefills = {
+      paths = file,
+    },
+  })
+end, {
+  silent = true,
+  desc = "Find and replace in current file",
+})
+
+-- Space → s → w — подставить слово под курсором
+map("n", "<leader>sw", function()
+  require("grug-far").open({
+    prefills = {
+      search = vim.fn.expand("<cword>"),
+      paths = grug_far_root(),
+    },
+  })
+end, {
+  silent = true,
+  desc = "Replace word under cursor",
+})

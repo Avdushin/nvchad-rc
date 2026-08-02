@@ -1,4 +1,11 @@
 return {
+    -- Legacy nvim-treesitter для старого NvChad v2.5.
+  -- Внутри установлен патч совместимости с Neovim 0.12.
+  {
+    "nvim-treesitter/nvim-treesitter",
+    branch = "master",
+    pin = true,
+  },
   {
     "stevearc/conform.nvim",
     opts = require "configs.conform",
