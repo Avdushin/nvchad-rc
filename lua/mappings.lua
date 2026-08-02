@@ -222,3 +222,12 @@ end, {
   silent = true,
   desc = "Replace word under cursor",
 })
+
+-- Toggle Fog & Ember / Gruvbox
+-- Space → u → t
+map("n", "<leader>ut", function()
+  require("base46").toggle_theme()
+end, {
+  silent = true,
+  desc = "Toggle Fog & Ember / Gruvbox",
+})

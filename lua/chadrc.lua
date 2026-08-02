@@ -2,7 +2,8 @@
 local M = {}
 
 M.base46 = {
-  theme = "gruvbox",
+  theme = "fog-and-ember",
+  theme_toggle = { "fog-and-ember", "gruvbox" },
   transparency = true,
 
   hl_override = {

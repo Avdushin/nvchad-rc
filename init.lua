@@ -34,6 +34,15 @@ require("lazy").setup({
 }, lazy_config)
 
 -- load theme
+-- Base46 хранит скомпилированные цвета в stdpath("data")/base46.
+-- Если кэш удалён или конфиг разворачивается на новой системе,
+-- создаём его перед первым dofile.
+local base46_defaults = vim.g.base46_cache .. "defaults"
+
+if not vim.uv.fs_stat(base46_defaults) then
+  require("base46").compile()
+end
+
 dofile(vim.g.base46_cache .. "defaults")
 dofile(vim.g.base46_cache .. "statusline")
 
