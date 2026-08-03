@@ -5,6 +5,12 @@ require "nvchad.mappings"
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
+-- Go to definition
+map("n", "gd", vim.lsp.buf.definition, {
+  silent = true,
+  desc = "Go to definition",
+})
+
 map("n", ";", ":", { desc = "CMD enter command mode" })
 map("i", "jk", "<ESC>")
 
@@ -17,27 +23,16 @@ map("n", "<C-S-i>", function()
 end, { desc = "Format code" })
 
 -- Bottom terminal (Ctrl + `)
+-- Сохраняет shell-сессию и установленную вручную высоту окна.
 map({ "n", "t" }, "<C-`>", function()
-  require("nvchad.term").toggle { id = 1, pos = "sp", size = 0.3 }
-end, { desc = "Bottom terminal" })
+  require("bottom_terminal").toggle()
+end, { desc = "Toggle persistent bottom terminal" })
 
 -- Right terminal (Ctrl + e)
 map({ "n", "t" }, "<C-e>", function()
   require("nvchad.term").toggle { id = 2, pos = "vsp", size = 0.3 }
 end, { desc = "Right terminal" })
 
--- Floating terminal (Ctrl + Shift + t)
-map({ "n", "t" }, "<C-S-t>", function()
-  require("nvchad.term").toggle {
-    id = 3,
-    pos = "float",
-  }
-end, { desc = "Floating terminal" })
-
--- Terminal in a tab
-map("n", "<leader>tt", function()
-  require("nvchad.term").new { pos = "t" }
-end, { desc = "Terminal tab" })
 
 -- File search like VS Code: Ctrl + P
 map("n", "<C-p>", function()
@@ -55,10 +50,6 @@ for i = 1, 9 do
     end
   end, { desc = "Go to buffer " .. i })
 end
-
-map("n", "<C-n>", function()
-  vim.cmd "enew" -- создать новый пустой буфер
-end, { desc = "New buffer" })
 
 -- New buffer (tab) on Ctrl + N
 map("n", "<C-n>", function()
@@ -103,7 +94,7 @@ map("i", "<C-S-Up>", "<Esc>:m .-2<CR>==gi", opts)
 -- Обернуть содержимое () в кавычки по <leader>"
 vim.keymap.set("n", '<leader>"', function()
   vim.cmd.normal { "yi(", bang = true }
-  local text = vim.fn.getreg("0")
+  local text = vim.fn.getreg "0"
   vim.cmd.normal { "ci(", bang = true }
   vim.api.nvim_put({ '"' .. text .. '"' }, "c", true, true)
 end, { silent = true, desc = 'Wrap () content in ""' })
@@ -111,10 +102,10 @@ end, { silent = true, desc = 'Wrap () content in ""' })
 -- Переключение кавычек (" → ' → ` → ")
 vim.keymap.set("n", "<leader>q", function()
   vim.cmd.normal { "yi(", bang = true }
-  local text = vim.fn.getreg("0")
+  local text = vim.fn.getreg "0"
 
   local first = text:sub(1, 1)
-  local last  = text:sub(-1)
+  local last = text:sub(-1)
   local body = text
   if (first == '"' or first == "'" or first == "`") and first == last then
     body = text:sub(2, -2)
@@ -135,3 +126,141 @@ end, { silent = true, desc = "Cycle quotes inside ()" })
 
 -- Двигать строку в INSERT, оставаясь в insert-режиме
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
+
+-- ============================================================
+-- Search and replace with Grug FAR
+-- ============================================================
+
+-- Определяет разумную область поиска:
+-- 1. корень Git-проекта;
+-- 2. вне Git — папка текущего файла;
+-- 3. для безымянного буфера — текущий рабочий каталог.
+local function grug_far_root()
+  local file = vim.api.nvim_buf_get_name(0)
+
+  local start
+  if file ~= "" then
+    start = vim.fs.dirname(file)
+  else
+    start = vim.fn.getcwd()
+  end
+
+  local git_dir = vim.fs.find(".git", {
+    path = start,
+    upward = true,
+    type = "directory",
+    limit = 1,
+  })[1]
+
+  if git_dir then
+    return vim.fs.dirname(git_dir)
+  end
+
+  return start
+end
+
+local function open_grug_far()
+  require("grug-far").open {
+    prefills = {
+      paths = grug_far_root(),
+    },
+  }
+end
+
+-- Ctrl+Shift+F — найти и заменить в проекте/папке файла
+map("n", "<C-S-f>", open_grug_far, {
+  silent = true,
+  desc = "Find and replace in project",
+})
+
+-- Space → s → r — запасное сочетание
+map("n", "<leader>sr", open_grug_far, {
+  silent = true,
+  desc = "Find and replace in project",
+})
+
+-- Space → s → f — найти и заменить только в текущем файле
+map("n", "<leader>sf", function()
+  local file = vim.api.nvim_buf_get_name(0)
+
+  if file == "" then
+    vim.notify("Текущий буфер не связан с файлом", vim.log.levels.WARN)
+    return
+  end
+
+  require("grug-far").open {
+    prefills = {
+      paths = file,
+    },
+  }
+end, {
+  silent = true,
+  desc = "Find and replace in current file",
+})
+
+-- Space → s → w — подставить слово под курсором
+map("n", "<leader>sw", function()
+  require("grug-far").open {
+    prefills = {
+      search = vim.fn.expand "<cword>",
+      paths = grug_far_root(),
+    },
+  }
+end, {
+  silent = true,
+  desc = "Replace word under cursor",
+})
+
+-- Toggle Fog & Ember / Gruvbox
+-- Space → u → t
+map("n", "<leader>ut", function()
+  require("base46").toggle_theme()
+end, {
+  silent = true,
+  desc = "Toggle Fog & Ember / Gruvbox",
+})
+
+-- Markdown images: toggle image.nvim
+-- Space -> m -> i
+map("n", "<leader>mi", function()
+  local ok, image = pcall(require, "image")
+
+  if not ok then
+    vim.notify("image.nvim не загружен", vim.log.levels.ERROR)
+    return
+  end
+
+  if image.is_enabled() then
+    image.disable()
+    vim.notify "Изображения Markdown выключены"
+  else
+    image.enable()
+    vim.notify "Изображения Markdown включены"
+  end
+end, {
+  silent = true,
+  desc = "Toggle Markdown images",
+})
+
+-- Диагностический отчёт image.nvim
+map("n", "<leader>mI", "<cmd>ImageReport<cr>", {
+  silent = true,
+  desc = "Markdown image report",
+})
+
+-- BEGIN persistent floating terminal
+-- Один терминальный буфер и одна сохраняемая shell-сессия.
+local function toggle_persistent_floating_terminal()
+  require("floating_terminal").toggle()
+end
+
+map({ "n", "t" }, "<C-S-t>", toggle_persistent_floating_terminal, {
+  silent = true,
+  desc = "Toggle persistent floating terminal",
+})
+
+map("n", "<leader>tt", toggle_persistent_floating_terminal, {
+  silent = true,
+  desc = "Toggle persistent floating terminal",
+})
+-- END persistent floating terminal

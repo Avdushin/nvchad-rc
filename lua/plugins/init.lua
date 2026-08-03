@@ -1,4 +1,11 @@
 return {
+  -- Legacy nvim-treesitter для старого NvChad v2.5.
+  -- Внутри установлен патч совместимости с Neovim 0.12.
+  {
+    "nvim-treesitter/nvim-treesitter",
+    branch = "master",
+    pin = true,
+  },
   {
     "stevearc/conform.nvim",
     opts = require "configs.conform",
@@ -10,12 +17,12 @@ return {
       require "configs.lspconfig"
     end,
   },
- {
+  {
     "kylechui/nvim-surround",
     version = "*",
     event = "VeryLazy",
     config = function()
-      require("nvim-surround").setup({})
+      require("nvim-surround").setup {}
     end,
   },
   -- === Markdown render (как в Obsidian) ===
@@ -84,6 +91,8 @@ return {
   -- === Images in Neovim ===
   {
     "3rd/image.nvim",
+    ft = { "markdown" },
+    cmd = { "ImageReport" },
     dependencies = { "nvim-lua/plenary.nvim" },
     build = false, -- чтобы не пытался собирать luarocks-рок
     opts = {
@@ -94,9 +103,9 @@ return {
       integrations = {
         markdown = {
           enabled = true,
-          clear_in_insert_mode = false,
+          clear_in_insert_mode = true,
           download_remote_images = true,
-          only_render_image_at_cursor = false,
+          only_render_image_at_cursor = true,
           only_render_image_at_cursor_mode = "popup", -- или "inline"
           floating_windows = false,
           filetypes = { "markdown" },

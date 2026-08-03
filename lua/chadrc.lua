@@ -2,7 +2,8 @@
 local M = {}
 
 M.base46 = {
-  theme = "gruvbox",
+  theme = "fog-and-ember",
+  theme_toggle = { "fog-and-ember", "gruvbox" },
   transparency = true,
 
   hl_override = {
@@ -50,6 +51,30 @@ M.base46 = {
     DiffChange = { bg = "none" },
     DiffDelete = { bg = "none" },
     DiffText   = { bg = "none" },
+  },
+}
+
+local statusline = require "statusline"
+
+M.ui = {
+  statusline = {
+    theme = "vscode_colored",
+    order = {
+      "mode",
+      "file",
+      "git",
+      "%=",
+      "lsp_msg",
+      "%=",
+      "diagnostics",
+      "language",
+      "cursor",
+      "cwd",
+    },
+    modules = {
+      diagnostics = statusline.diagnostics,
+      language = statusline.language,
+    },
   },
 }
 
