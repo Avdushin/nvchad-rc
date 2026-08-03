@@ -59,7 +59,11 @@ end, { desc = "New buffer" })
 -- Close current buffer (tab) on Ctrl + W
 map("n", "<C-w>", function()
   require("nvchad.tabufline").close_buffer()
-end, { desc = "Close buffer" })
+end, {
+  silent = true,
+  nowait = true,
+  desc = "Close current buffer",
+})
 
 -- Copy relative path of current file to clipboard (Alt + Shift + C)
 map("n", "<leader>c", function()
