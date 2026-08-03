@@ -268,3 +268,20 @@ map("n", "<leader>tt", toggle_persistent_floating_terminal, {
   desc = "Toggle persistent floating terminal",
 })
 -- END persistent floating terminal
+
+-- ============================================================
+-- Find text in current file
+-- ============================================================
+
+-- Normal mode: сразу открыть поиск.
+map("n", "<C-f>", "/", {
+  silent = false,
+  desc = "Find text in current file",
+})
+
+-- Insert / Visual / Select mode:
+-- сначала перейти в Normal mode, затем открыть поиск.
+map({ "i", "x", "s" }, "<C-f>", "<Esc>/", {
+  silent = false,
+  desc = "Find text in current file",
+})
