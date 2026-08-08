@@ -137,9 +137,17 @@ Useful native Vim commands:
 | `Ctrl + B` | Toggle NvimTree |
 | `Ctrl + 1..9` | Jump to buffer 1–9 |
 | `Ctrl + N` | Create a new buffer |
-| `Ctrl + W` | Close current buffer |
+| `Ctrl + Q` | Close current buffer |
 
-`Ctrl + W` is intentionally remapped from the default Vim window prefix to behave more like closing a tab in VS Code.
+Buffers and windows are intentionally handled separately:
+
+```text
+Ctrl + Q      Close the current buffer/file
+Ctrl + W ...  Manage windows and splits
+```
+
+Closing a window does not necessarily close its buffer, while `Ctrl + Q`
+removes the current buffer from NvChad's tabufline.
 
 ### NvimTree
 
@@ -169,7 +177,9 @@ src/components/Button.tsx
 ```
 
 
-## 🪟 Splits
+## 🪟 Windows & Splits
+
+`Ctrl + W` keeps its native Vim behavior and acts as the main window-management prefix.
 
 ### Create splits
 
@@ -177,10 +187,12 @@ src/components/Button.tsx
 | --- | --- |
 | `<leader>v` | Vertical split |
 | `<leader>h` | Horizontal split |
+| `Ctrl + W, V` | Vertical split |
+| `Ctrl + W, S` | Horizontal split |
 
-### Navigate between splits
+### Navigate between windows
 
-Inherited from NvChad:
+Quick NvChad mappings:
 
 | Key | Action |
 | --- | --- |
@@ -189,7 +201,34 @@ Inherited from NvChad:
 | `Ctrl + K` | Move up |
 | `Ctrl + L` | Move right |
 
+Native Vim alternatives:
+
+| Key | Action |
+| --- | --- |
+| `Ctrl + W, H` | Move to window on the left |
+| `Ctrl + W, J` | Move to window below |
+| `Ctrl + W, K` | Move to window above |
+| `Ctrl + W, L` | Move to window on the right |
+| `Ctrl + W, W` | Cycle through windows |
+
+### Close windows
+
+| Key | Action |
+| --- | --- |
+| `Ctrl + W, C` | Close current window |
+| `Ctrl + W, Q` | Quit current window |
+| `Ctrl + W, O` | Keep only the current window |
+
+Remember:
+
+```text
+Ctrl + Q       Close buffer
+Ctrl + W, C    Close window/split
+```
+
 ### Resize splits
+
+Custom shortcuts:
 
 | Key | Action |
 | --- | --- |
@@ -199,6 +238,15 @@ Inherited from NvChad:
 | `<leader>↑` | Decrease height |
 | `<leader>=` | Equalize all splits |
 
+Native Vim alternatives:
+
+| Key | Action |
+| --- | --- |
+| `Ctrl + W, >` | Increase width |
+| `Ctrl + W, <` | Decrease width |
+| `Ctrl + W, +` | Increase height |
+| `Ctrl + W, -` | Decrease height |
+| `Ctrl + W, =` | Equalize window sizes |
 
 ## 🔎 Search & Replace
 
