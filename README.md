@@ -18,7 +18,6 @@ The config includes:
 - custom surround behavior
 - lightweight Markdown notes workflow
 
----
 
 ## 📸 Screenshots
 
@@ -34,7 +33,83 @@ The config includes:
 
 ![split](./imgs/split.jpg)
 
----
+
+## 🚀 Quick Start
+
+### 1. Install dependencies
+
+Arch Linux / Wayland:
+
+```bash
+sudo pacman -S --needed \
+  git neovim ripgrep nodejs npm imagemagick wl-clipboard \
+  curl unzip ttf-jetbrains-mono-nerd
+```
+
+### 2. Clone config
+
+```bash
+mv ~/.config/nvim ~/.config/nvim.bak-$(date +%Y%m%d-%H%M%S) 2>/dev/null || true
+
+git clone https://github.com/Avdushin/nvchad-rc ~/.config/nvim
+
+nvim
+```
+
+NvChad and plugins will be installed automatically through `lazy.nvim`.
+
+### 3. Sync plugins
+
+Inside Neovim:
+
+```vim
+:Lazy sync
+```
+
+### 4. Install LSP servers
+
+```vim
+:MasonUpdate
+:MasonInstall html-lsp css-lsp typescript-language-server json-lsp marksman rust-analyzer gopls pyright emmet-language-server
+```
+
+Wait until Mason finishes, then restart Neovim:
+
+```vim
+:qa
+```
+
+```bash
+nvim
+```
+
+### 5. Verify
+
+```vim
+:checkhealth
+:checkhealth vim.lsp
+:LspInfo
+```
+
+For Emmet:
+
+```vim
+:echo executable('emmet-language-server')
+```
+
+Expected:
+
+```text
+1
+```
+
+Useful maintenance commands:
+
+```vim
+:Lazy update
+:Mason
+:MasonUpdate
+```
 
 ## ⚡ Shortcut Cheatsheet
 
@@ -62,7 +137,6 @@ Useful native Vim commands:
 | `Ctrl + O` | Jump back |
 | `Ctrl + I` | Jump forward |
 
----
 
 ## 📁 Files & Buffers
 
@@ -103,7 +177,6 @@ Or create nested paths directly:
 src/components/Button.tsx
 ```
 
----
 
 ## 🪟 Splits
 
@@ -135,7 +208,6 @@ Inherited from NvChad:
 | `<leader>↑` | Decrease height |
 | `<leader>=` | Equalize all splits |
 
----
 
 ## 🔎 Search & Replace
 
@@ -172,7 +244,6 @@ The search root is resolved automatically:
 2. current file directory when outside Git
 3. current working directory for unnamed buffers
 
----
 
 ## 🧵 Multicursor
 
@@ -205,7 +276,6 @@ Ctrl+D
 
 Then edit all selected occurrences simultaneously.
 
----
 
 ## 🛠 Formatting
 
@@ -217,7 +287,6 @@ Ctrl + Shift + I
 
 formats the current buffer.
 
----
 
 ## 🧠 LSP
 
@@ -303,7 +372,6 @@ For the current buffer:
 :LspInfo
 ```
 
----
 
 ## ⚡ Emmet
 
@@ -349,7 +417,6 @@ Expected result:
 1
 ```
 
----
 
 ## 🖥 Terminals
 
@@ -364,7 +431,6 @@ The setup has three terminal layouts.
 
 The bottom and floating terminals preserve their shell session while being hidden.
 
----
 
 ## 📝 Markdown
 
@@ -394,7 +460,6 @@ A terminal supporting the Kitty graphics protocol is recommended.
 
 ImageMagick is required for `magick_cli`.
 
----
 
 ## 📝 Notes
 
@@ -428,7 +493,6 @@ Mappings:
 
 Notes inside `~/Workspace/notes` are automatically saved on buffer leave, focus loss and leaving Insert mode.
 
----
 
 ## ✨ Surround
 
@@ -472,7 +536,6 @@ and again:
 
 Linewise Visual mode (`Shift + V`) is also supported for multiline wrappers.
 
----
 
 ## 🇷🇺 Russian keyboard layout
 
@@ -491,7 +554,6 @@ continue to behave as their English-layout counterparts.
 
 `Ctrl+A..Z` and `Ctrl+Shift+A..Z` are additionally mirrored for Russian physical keys where supported by the terminal.
 
----
 
 ## 🎨 UI & Theme
 
@@ -533,7 +595,6 @@ vscode_colored
 
 layout with Git, LSP, diagnostics, language, cursor position and working directory information.
 
----
 
 ## 🔌 Main Plugins
 
@@ -555,7 +616,6 @@ The configuration is based on NvChad and additionally uses:
 
 The `nvim-treesitter` configuration intentionally uses the legacy `master` branch and is pinned for compatibility with the current NvChad v2.5 setup.
 
----
 
 ## 📁 File Structure
 
@@ -594,7 +654,6 @@ The `nvim-treesitter` configuration intentionally uses the legacy `master` branc
         └── fog-and-ember.lua
 ```
 
----
 
 ## 🚀 Installation
 
@@ -639,7 +698,6 @@ Inside Neovim:
 
 Restart Neovim after installation.
 
----
 
 ## 🧩 Requirements
 
@@ -666,7 +724,6 @@ For Markdown image rendering, use a terminal that supports the Kitty graphics pr
 
 Some language-specific features may also require their respective toolchains.
 
----
 
 ## 🔧 Maintenance
 
