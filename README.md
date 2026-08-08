@@ -33,74 +33,65 @@ The config includes:
 
 ![split](./imgs/split.jpg)
 
-
 ## 🚀 Quick Start
 
-### 1. Install dependencies
-
-Arch Linux / Wayland:
+### Linux / macOS — one-command install
 
 ```bash
-sudo pacman -S --needed \
-  git neovim ripgrep nodejs npm imagemagick wl-clipboard \
-  curl unzip ttf-jetbrains-mono-nerd
+curl -fsSL https://raw.githubusercontent.com/Avdushin/nvchad-rc/main/install.sh | bash
 ```
 
-### 2. Clone config
+The installer will:
+
+- detect Linux or macOS
+- install required system packages
+- backup an existing `~/.config/nvim`
+- clone this repository
+- install/sync plugins with `lazy.nvim`
+- install configured LSP servers with Mason
+
+Then:
 
 ```bash
-mv ~/.config/nvim ~/.config/nvim.bak-$(date +%Y%m%d-%H%M%S) 2>/dev/null || true
-
-git clone https://github.com/Avdushin/nvchad-rc ~/.config/nvim
-
 nvim
 ```
 
-NvChad and plugins will be installed automatically through `lazy.nvim`.
+> The automatic installer currently supports Arch Linux, Debian/Ubuntu,
+> Fedora and macOS with Homebrew.
 
-### 3. Sync plugins
+### Manual / Windows installation
 
-Inside Neovim:
+Clone the config:
+
+```bash
+git clone https://github.com/Avdushin/nvchad-rc ~/.config/nvim
+```
+
+Start Neovim:
+
+```bash
+nvim
+```
+
+Sync plugins:
 
 ```vim
 :Lazy sync
 ```
 
-### 4. Install LSP servers
+Update Mason registry and install LSP servers:
 
 ```vim
 :MasonUpdate
 :MasonInstall html-lsp css-lsp typescript-language-server json-lsp marksman rust-analyzer gopls pyright emmet-language-server
 ```
 
-Wait until Mason finishes, then restart Neovim:
-
-```vim
-:qa
-```
-
-```bash
-nvim
-```
-
-### 5. Verify
+Restart Neovim and verify:
 
 ```vim
 :checkhealth
 :checkhealth vim.lsp
 :LspInfo
-```
-
-For Emmet:
-
-```vim
-:echo executable('emmet-language-server')
-```
-
-Expected:
-
-```text
-1
 ```
 
 Useful maintenance commands:
