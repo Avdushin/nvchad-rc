@@ -13,7 +13,8 @@ My current standalone Neovim configuration.
 
 > Historical note: this repository used to contain my NvChad configuration.
 > The repository name is kept for continuity, but the current config is a
-> standalone profile loaded with `NVIM_APPNAME=mine-nvim`.
+> standalone Neovim configuration. It can be installed as the default
+> `~/.config/nvim` profile or as an isolated `NVIM_APPNAME` profile.
 
 ## Install
 
