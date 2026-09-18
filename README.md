@@ -1,6 +1,15 @@
 # mine-nvim
-
 My current standalone Neovim configuration.
+
+## Demo
+
+![](./imgs/1.jpg) \
+![](./imgs/2.jpg) \
+![](./imgs/3.jpg) \
+![](./imgs/4.jpg) \
+![](./imgs/5.jpg) \
+![](./imgs/6.jpg)
+
 
 > Historical note: this repository used to contain my NvChad configuration.
 > The repository name is kept for continuity, but the current config is a
