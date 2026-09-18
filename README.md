@@ -17,17 +17,109 @@ My current standalone Neovim configuration.
 
 ## Install
 
-Clone the config into its own Neovim app profile:
+The easiest way to install this config on a Linux workstation, Linux server, or macOS machine is:
 
 ```bash
-git clone https://github.com/Avdushin/nvchad-rc ~/.config/mine-nvim
-NVIM_APPNAME=mine-nvim nvim
+curl -fsSL https://raw.githubusercontent.com/Avdushin/nvchad-rc/main/install.sh | bash
 ```
 
-SSH alternative:
+After installation, start Neovim normally:
 
 ```bash
-git clone git@github.com:Avdushin/nvchad-rc.git ~/.config/mine-nvim
+nvim
+```
+
+The installer:
+
+- supports Linux and macOS;
+- supports x86_64 / amd64 and arm64 / Apple Silicon;
+- installs missing system dependencies;
+- installs a recent Neovim when the existing version is too old for this config;
+- keeps an existing system Neovim installation untouched;
+- installs Node.js, Go and tree-sitter CLI when required;
+- clones this repository into `~/.config/nvim`;
+- installs plugins with lazy.nvim;
+- installs configured LSP servers and formatters with Mason;
+- installs the configured Tree-sitter parsers;
+- verifies the installation before finishing.
+
+### Existing Neovim configuration
+
+If another Neovim profile already exists, the installer does **not** delete it.
+
+Before installing this config it moves the existing profile into a timestamped backup directory under:
+
+```text
+~/.local/share/nvim-bootstrap-backups/
+```
+
+The backup can include:
+
+```text
+~/.config/nvim
+~/.local/share/nvim
+~/.local/state/nvim
+~/.cache/nvim
+```
+
+At the end of the installation the exact backup path is printed.
+
+If the existing `~/.config/nvim` is already this repository, the installer does not create a backup and instead updates it with:
+
+```bash
+git pull --ff-only
+```
+
+### Linux
+
+The same one-line installer can be used on a desktop or server:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Avdushin/nvchad-rc/main/install.sh | bash
+```
+
+Supported package managers for missing base packages:
+
+- apt;
+- dnf;
+- pacman.
+
+### macOS
+
+Use the same command on Intel and Apple Silicon Macs:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Avdushin/nvchad-rc/main/install.sh | bash
+```
+
+The installer uses official prebuilt downloads where possible and does not require Homebrew.
+
+If Xcode Command Line Tools are missing, the installer attempts to install them. If macOS requires interactive confirmation, run:
+
+```bash
+xcode-select --install
+```
+
+once and then re-run the installer.
+
+### Isolated profile
+
+By default the config becomes the normal Neovim profile at:
+
+```text
+~/.config/nvim
+```
+
+If you want to keep your default Neovim configuration and install this setup as a separate profile instead:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Avdushin/nvchad-rc/main/install.sh | APP_NAME=mine-nvim bash
+```
+
+Run the isolated profile with:
+
+```bash
+NVIM_APPNAME=mine-nvim nvim
 ```
 
 For a convenient Zsh launcher:
@@ -37,8 +129,6 @@ n() {
     NVIM_APPNAME=mine-nvim nvim "$@"
 }
 ```
-
-This keeps the profile isolated from the default `~/.config/nvim` configuration.
 
 ## Main UX
 
