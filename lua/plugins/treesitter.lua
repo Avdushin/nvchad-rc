@@ -8,39 +8,6 @@ return {
       local treesitter = require("nvim-treesitter")
       treesitter.setup({})
 
-      local parsers = {
-        "bash",
-        "c",
-        "css",
-        "diff",
-        "dockerfile",
-        "gitcommit",
-        "go",
-        "gomod",
-        "gosum",
-        "html",
-        "javascript",
-        "json",
-        "jsonc",
-        "lua",
-        "markdown",
-        "markdown_inline",
-        "python",
-        "regex",
-        "rust",
-        "toml",
-        "tsx",
-        "typescript",
-        "vim",
-        "vimdoc",
-        "yaml",
-      }
-
-      vim.schedule(function()
-        pcall(function()
-          treesitter.install(parsers)
-        end)
-      end)
 
       vim.api.nvim_create_autocmd("FileType", {
         pattern = {

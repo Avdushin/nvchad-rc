@@ -576,15 +576,30 @@ install_mason_tools() {
 install_treesitter_parsers() {
   log "Installing Tree-sitter parsers"
 
+  local jobs=4
+  if [[ "$OS" == "Darwin" ]]; then
+    # Keep parser extraction/rename deterministic on macOS filesystems.
+    jobs=1
+  fi
+
+  # Remove only incomplete temp work left by an interrupted previous process.
+  if [[ -d "$CACHE_DIR" ]]; then
+    find "$CACHE_DIR" -maxdepth 1 -type d -name 'tree-sitter-*-tmp' -exec rm -rf {} + 2>/dev/null || true
+  fi
+
   local lua
-  lua="require('nvim-treesitter').install({\
+  lua="local ts=require('nvim-treesitter'); local parsers={\
 'bash','c','css','diff','dockerfile','gitcommit','go','gomod','gosum','html',\
-'javascript','json','jsonc','lua','markdown','markdown_inline','python','regex',\
+'javascript','json','lua','markdown','markdown_inline','python','regex',\
 'rust','toml','tsx','typescript','vim','vimdoc','yaml'\
-},{summary=true,max_jobs=4}):wait(300000)"
+}; ts.install(parsers,{summary=true,max_jobs=$jobs}):wait(600000); \
+local installed={}; for _,lang in ipairs(ts.get_installed('parsers')) do installed[lang]=true end; \
+local missing={}; for _,lang in ipairs(parsers) do if not installed[lang] then table.insert(missing,lang) end end; \
+assert(#missing==0,'Missing Tree-sitter parsers: '..table.concat(missing,', '))"
 
   run_nvim --headless "+lua $lua" +qa
 }
+
 
 verify_installation() {
   log "Verifying installation"
@@ -617,8 +632,8 @@ main() {
   install_tree_sitter
   clone_config
   install_plugins
-  install_mason_tools
   install_treesitter_parsers
+  install_mason_tools
   verify_installation
 
   printf '\n\033[1;32mDone.\033[0m Neovim config is ready.\n\n'
