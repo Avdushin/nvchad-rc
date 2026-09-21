@@ -535,7 +535,7 @@ clone_config() {
 }
 
 run_nvim() {
-  "$NVIM_BIN" "$@"
+  env NVIM_BOOTSTRAP=1 "$NVIM_BIN" "$@"
 }
 
 install_plugins() {
@@ -546,32 +546,42 @@ install_plugins() {
 install_mason_tools() {
   log "Installing LSP servers, formatters and CLI tools through Mason"
 
-  local lua
-  lua="require('mason-tool-installer').setup({ensure_installed={\
-'bash-language-server',\
-'vscode-langservers-extracted',\
-'eslint-lsp',\
-'gopls',\
-'lua-language-server',\
-'marksman',\
-'pyright',\
-'rust-analyzer',\
-'taplo',\
-'typescript-language-server',\
-'yaml-language-server',\
-'goimports',\
-'prettierd',\
-'ruff',\
-'shfmt',\
-'stylua'\
-},run_on_start=false,integrations={['mason-lspconfig']=false,['mason-null-ls']=false,['mason-nvim-dap']=false}})"
+  local packages=(
+    bash-language-server
+    vscode-langservers-extracted
+    eslint-lsp
+    gopls
+    lua-language-server
+    marksman
+    pyright
+    rust-analyzer
+    taplo
+    typescript-language-server
+    yaml-language-server
+    goimports
+    prettierd
+    ruff
+    shfmt
+    stylua
+  )
 
-  run_nvim --headless \
-    "+Lazy! load mason-tool-installer.nvim" \
-    "+lua $lua" \
-    "+MasonToolsInstallSync" \
-    +qa
+  # Load Mason once to ensure its commands are registered. Individual package
+  # installs are then executed serially so a stalled package is immediately
+  # visible in the bootstrap log.
+  run_nvim --headless     "+Lazy! load mason.nvim"     "+lua require('mason').setup({max_concurrent_installers=1})"     +qa
+
+  local package
+  for package in "${packages[@]}"; do
+    log "Mason: $package"
+
+    if ! run_nvim --headless       "+Lazy! load mason.nvim"       "+lua require('mason').setup({max_concurrent_installers=1})"       "+MasonInstall $package"       +qa; then
+      warn "Mason failed while installing: $package"
+      warn "Open Neovim and run :MasonLog for the detailed Mason log."
+      return 1
+    fi
+  done
 }
+
 
 install_treesitter_parsers() {
   log "Installing Tree-sitter parsers"

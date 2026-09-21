@@ -153,7 +153,9 @@ return {
         "stylua",
       },
       auto_update = false,
-      run_on_start = true,
+      -- The standalone bootstrap installs tools explicitly. Avoid starting a
+      -- second background Mason installation in headless bootstrap sessions.
+      run_on_start = vim.env.NVIM_BOOTSTRAP ~= "1",
       start_delay = 2500,
       debounce_hours = 24,
     },
