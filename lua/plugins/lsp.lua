@@ -185,7 +185,7 @@ return {
       })
 
       vim.api.nvim_create_autocmd("LspAttach", {
-        group = vim.api.nvim_create_augroup("MineNvimLsp", { clear = true }),
+        group = vim.api.nvim_create_augroup("NvimConfigLsp", { clear = true }),
         callback = function(args)
           local map = function(lhs, rhs, desc, mode)
             vim.keymap.set(mode or "n", lhs, rhs, {
