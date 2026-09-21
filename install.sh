@@ -32,7 +32,6 @@ GO_ARCH=""
 TREE_SITTER_ASSET=""
 RIPGREP_TRIPLE=""
 NVIM_BIN=""
-PROFILE_IS_OURS=0
 
 log() {
   printf '\n\033[1;34m==>\033[0m %s\n' "$*"
@@ -509,21 +508,6 @@ install_tree_sitter() {
   log "Installed tree-sitter CLI $version"
 }
 
-is_our_config_repo() {
-  local origin=""
-  [[ -d "$CONFIG_DIR/.git" ]] || return 1
-  origin="$(git -C "$CONFIG_DIR" remote get-url origin 2>/dev/null || true)"
-
-  case "$origin" in
-    https://github.com/Avdushin/nvchad-rc|https://github.com/Avdushin/nvchad-rc.git|git@github.com:Avdushin/nvchad-rc.git)
-      return 0
-      ;;
-    *)
-      return 1
-      ;;
-  esac
-}
-
 backup_existing_profile() {
   local found=0
   local path
@@ -544,28 +528,9 @@ backup_existing_profile() {
   backup_item "$CACHE_DIR" "cache"
 }
 
-prepare_existing_profile() {
-  if is_our_config_repo; then
-    PROFILE_IS_OURS=1
-    log "Existing nvchad-rc profile detected; no backup is needed"
-    return
-  fi
-
-  backup_existing_profile
-}
-
-clone_or_update_config() {
+clone_config() {
   log "Installing Neovim config into $CONFIG_DIR"
   mkdir -p "$CONFIG_ROOT"
-
-  if (( PROFILE_IS_OURS == 1 )); then
-    log "Config repository already exists; updating with fast-forward only"
-    if ! git -C "$CONFIG_DIR" pull --ff-only; then
-      warn "Could not fast-forward the existing config. Keeping local files unchanged."
-    fi
-    return
-  fi
-
   git clone --depth 1 --branch main "$REPO_URL" "$CONFIG_DIR"
 }
 
@@ -645,12 +610,12 @@ main() {
   ensure_local_path
   detect_platform
   install_system_dependencies
-  prepare_existing_profile
+  backup_existing_profile
   install_neovim
   install_node
   install_go
   install_tree_sitter
-  clone_or_update_config
+  clone_config
   install_plugins
   install_mason_tools
   install_treesitter_parsers
