@@ -1,4 +1,4 @@
-# mine-nvim
+# Neovim configuration
 
 My current standalone Neovim configuration.
 
@@ -13,8 +13,7 @@ My current standalone Neovim configuration.
 
 > Historical note: this repository used to contain my NvChad configuration.
 > The repository name is kept for continuity, but the current config is a
-> standalone Neovim configuration. It can be installed as the default
-> `~/.config/nvim` profile or as an isolated `NVIM_APPNAME` profile.
+> standalone Neovim configuration installed as the standard `~/.config/nvim` profile.
 
 ## Install
 
@@ -29,6 +28,8 @@ After installation, start Neovim normally:
 ```bash
 nvim
 ```
+
+The installer replaces the standard Neovim profile at `~/.config/nvim`.
 
 The installer:
 
@@ -102,34 +103,6 @@ xcode-select --install
 ```
 
 once and then re-run the installer.
-
-### Isolated profile
-
-By default the config becomes the normal Neovim profile at:
-
-```text
-~/.config/nvim
-```
-
-If you want to keep your default Neovim configuration and install this setup as a separate profile instead:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/Avdushin/nvchad-rc/main/install.sh | APP_NAME=mine-nvim bash
-```
-
-Run the isolated profile with:
-
-```bash
-NVIM_APPNAME=mine-nvim nvim
-```
-
-For a convenient Zsh launcher:
-
-```zsh
-n() {
-    NVIM_APPNAME=mine-nvim nvim "$@"
-}
-```
 
 ## Main UX
 
