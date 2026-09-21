@@ -2,22 +2,21 @@
 set -Eeuo pipefail
 
 REPO_URL="${REPO_URL:-https://github.com/Avdushin/nvchad-rc.git}"
-APP_NAME="${APP_NAME:-nvim}"
 CONFIG_ROOT="${XDG_CONFIG_HOME:-$HOME/.config}"
 DATA_ROOT="${XDG_DATA_HOME:-$HOME/.local/share}"
 STATE_ROOT="${XDG_STATE_HOME:-$HOME/.local/state}"
 CACHE_ROOT="${XDG_CACHE_HOME:-$HOME/.cache}"
 
-CONFIG_DIR="$CONFIG_ROOT/$APP_NAME"
-DATA_DIR="$DATA_ROOT/$APP_NAME"
-STATE_DIR="$STATE_ROOT/$APP_NAME"
-CACHE_DIR="$CACHE_ROOT/$APP_NAME"
+CONFIG_DIR="$CONFIG_ROOT/nvim"
+DATA_DIR="$DATA_ROOT/nvim"
+STATE_DIR="$STATE_ROOT/nvim"
+CACHE_DIR="$CACHE_ROOT/nvim"
 
 LOCAL_BIN="$HOME/.local/bin"
 LOCAL_OPT="$HOME/.local/opt"
 BACKUP_ROOT="${BACKUP_ROOT:-$HOME/.local/share/nvim-bootstrap-backups}"
 BACKUP_STAMP="$(date +%Y%m%d%H%M%S)"
-BACKUP_DIR="$BACKUP_ROOT/${BACKUP_STAMP}-${APP_NAME}"
+BACKUP_DIR="$BACKUP_ROOT/${BACKUP_STAMP}-nvim"
 BACKUP_USED=0
 
 MIN_NVIM_VERSION="0.12.0"
@@ -287,7 +286,7 @@ install_macos_ripgrep() {
   extracted="$tmp/ripgrep-${RIPGREP_VERSION}-${RIPGREP_TRIPLE}/rg"
   [[ -x "$extracted" ]] || die "Downloaded ripgrep archive has an unexpected layout."
 
-  target="$LOCAL_OPT/mine-nvim-ripgrep"
+  target="$LOCAL_OPT/nvim-bootstrap-ripgrep"
   rm -rf "$target"
   mkdir -p "$target/bin"
   mv "$extracted" "$target/bin/rg"
@@ -351,7 +350,7 @@ install_neovim() {
   extracted="$tmp/$NVIM_ASSET"
   [[ -x "$extracted/bin/nvim" ]] || die "Downloaded Neovim archive has an unexpected layout."
 
-  target="$LOCAL_OPT/mine-nvim-neovim"
+  target="$LOCAL_OPT/nvim-bootstrap-neovim"
   rm -rf "$target"
   mv "$extracted" "$target"
   safe_symlink "$target/bin/nvim" "$LOCAL_BIN/nvim" "nvim"
@@ -396,7 +395,7 @@ install_node() {
   extracted="$tmp/node-${latest}-${NODE_PLATFORM}"
   [[ -x "$extracted/bin/node" ]] || die "Downloaded Node.js archive has an unexpected layout."
 
-  target="$LOCAL_OPT/mine-nvim-node"
+  target="$LOCAL_OPT/nvim-bootstrap-node"
   rm -rf "$target"
   mv "$extracted" "$target"
 
@@ -445,7 +444,7 @@ install_go() {
   tar -xzf "$archive" -C "$tmp"
   [[ -x "$tmp/go/bin/go" ]] || die "Downloaded Go archive has an unexpected layout."
 
-  target="$LOCAL_OPT/mine-nvim-go"
+  target="$LOCAL_OPT/nvim-bootstrap-go"
   rm -rf "$target"
   mv "$tmp/go" "$target"
   safe_symlink "$target/bin/go" "$LOCAL_BIN/go" "go"
@@ -494,7 +493,7 @@ install_tree_sitter() {
     xattr -c "$binary" 2>/dev/null || true
   fi
 
-  target="$LOCAL_OPT/mine-nvim-tree-sitter"
+  target="$LOCAL_OPT/nvim-bootstrap-tree-sitter"
   rm -rf "$target"
   mkdir -p "$target/bin"
   mv "$binary" "$target/bin/tree-sitter"
@@ -571,11 +570,7 @@ clone_or_update_config() {
 }
 
 run_nvim() {
-  if [[ "$APP_NAME" == "nvim" ]]; then
-    "$NVIM_BIN" "$@"
-  else
-    env NVIM_APPNAME="$APP_NAME" "$NVIM_BIN" "$@"
-  fi
+  "$NVIM_BIN" "$@"
 }
 
 install_plugins() {
@@ -662,11 +657,7 @@ main() {
   verify_installation
 
   printf '\n\033[1;32mDone.\033[0m Neovim config is ready.\n\n'
-  if [[ "$APP_NAME" == "nvim" ]]; then
-    printf 'Start it with:\n  nvim\n'
-  else
-    printf 'Start it with:\n  NVIM_APPNAME=%s nvim\n' "$APP_NAME"
-  fi
+  printf 'Start it with:\n  nvim\n'
 
   printf '\nConfig: %s\n' "$CONFIG_DIR"
   printf 'Neovim: %s\n' "$NVIM_BIN"
