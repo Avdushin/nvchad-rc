@@ -66,11 +66,7 @@ The backup can include:
 
 At the end of the installation the exact backup path is printed.
 
-If the existing `~/.config/nvim` is already this repository, the installer does not create a backup and instead updates it with:
-
-```bash
-git pull --ff-only
-```
+Every existing Neovim profile is backed up before a fresh copy of this repository is installed.
 
 ### Linux
 
