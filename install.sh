@@ -548,7 +548,9 @@ install_mason_tools() {
 
   local packages=(
     bash-language-server
-    vscode-langservers-extracted
+    css-lsp
+    html-lsp
+    json-lsp
     eslint-lsp
     gopls
     lua-language-server
